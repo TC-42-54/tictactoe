@@ -1,0 +1,91 @@
+$line: #e9e9e9;
+$game: #d9d9d9;
+$noir: #000000;
+$blanc: #ffffff;
+$rouge: red;
+$bleu: blue;
+$vert: #00dd00;
+
+.game-area {
+  background-color: $game;
+  display: block;
+  height: 350px;
+  margin: auto;
+  padding: 15px;
+  width: 350px;
+  .line {
+    background-color: $line;
+    height: 33.333333%;
+    width: 100%;
+    display: flex;
+    position: relative;
+    .case {
+      width: 33.333333%;
+      height: 100%;
+      position: relative;
+      transition: all 0.5s ease;
+      color: $blanc;
+      &:hover {
+        background-color: $blanc;
+      }
+      &:nth-child(2) {
+        &:before {
+          content: "";
+          height: 100%;
+          left: 0;
+          position: absolute;
+          width: 1px;
+          top: 0;
+          background-color: $noir;
+          opacity: .6;
+        }
+        &:after {
+          content: "";
+          height: 100%;
+          right: 0;
+          position: absolute;
+          width: 1px;
+          top: 0;
+          background-color: $noir;
+          opacity: .6;
+        }
+      }
+      &.clicked {
+        background-color: $blanc;
+        font-size: 84px;
+        line-height: 1.4em;
+        text-align: center;
+        &.Oplayer {
+          color: $rouge;
+        }
+        &.Xplayer {
+          color: $bleu;
+        }
+      }
+      &.success {
+        background-color: $vert;
+      }
+    }
+    &:before {
+      content: "";
+      height: 1px;
+      left: 0;
+      position: absolute;
+      transform: translateY(-50%);
+      width: 100%;
+      top: 0;
+      background-color: $noir;
+      opacity: .6;
+    }
+    &:first-child {
+      &:before {
+        display: none;
+      }
+      .case {
+        /*&:before {
+          display: none;
+        }*/
+      }
+    }
+  }
+}
