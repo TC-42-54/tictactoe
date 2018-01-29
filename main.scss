@@ -38,6 +38,7 @@ $vert: #00dd00;
           top: 0;
           background-color: $noir;
           opacity: .6;
+          z-index: 99;
         }
         &:after {
           content: "";
@@ -48,6 +49,7 @@ $vert: #00dd00;
           top: 0;
           background-color: $noir;
           opacity: .6;
+          z-index: 99;
         }
       }
       &.clicked {
@@ -76,6 +78,7 @@ $vert: #00dd00;
       top: 0;
       background-color: $noir;
       opacity: .6;
+      z-index: 99;
     }
     &:first-child {
       &:before {
