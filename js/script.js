@@ -103,6 +103,7 @@ const checkVictory = () => {
 }
 
 const removeListeners = () => {
+  var gameArea = document.getElementById('game');
   for (var i = 0; i < table.length; i++) {
     for (var j = 0; j < table[i].length; j++) {
       var selectedCase = gameArea.getElementsByClassName('line')[i].getElementsByClassName('case')[j];
