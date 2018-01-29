@@ -127,7 +127,6 @@ const clickOnCase = (evt, player) => {
   lastPlayed = player;
   if (!checkVictory(table)) {
     if (!tableIsCompleted(table)) {
-      console.log(table);
       nextPlay(lastPlayed, players);
     }
   } else {
