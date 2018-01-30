@@ -1,6 +1,42 @@
 var table;
 var players = ["O", "X"];
 var lastPlayed;
+var otherPlayer;
+var you;
+const s = io();
+
+s.on('otherPlayerId', (id, y) => {
+  if (typeof id !== "undefined") {
+    otherPlayer = id;
+    you = y;
+    document.getElementsByClassName('waiting')[0].className += " hide";
+    nextPlay(lastPlayed, players);
+  }
+});
+
+s.on('played', (sign, lIndex, cIndex) => {
+  console.log("received played data");
+  var gameArea = document.getElementById('game');
+  table[lIndex][cIndex] = sign;
+  gameArea.getElementsByClassName('line')[lIndex].getElementsByClassName('case')[cIndex].className += " " + sign + "player clicked";
+  gameArea.getElementsByClassName('line')[lIndex].getElementsByClassName('case')[cIndex].innerHTML = sign;
+  lastPlayed = sign;
+  if (!checkVictory(table)) {
+    if (!tableIsCompleted(table)) {
+      nextPlay(lastPlayed, players);
+    } else {
+      document.getElementById('equal').className = "show";
+      removeListeners();
+    }
+  } else {
+    document.getElementById('lose').className = "show";
+    removeListeners();
+  }
+});
+
+window.addEventListener('beforeunload', e => {
+  s.close();
+});
 
 const buildTable = () => {
   var t = new Array([], [], []);
@@ -126,11 +162,16 @@ const clickOnCase = (evt, player) => {
     }
   }
   lastPlayed = player;
+  s.emit('played', you, lIndex, cIndex, otherPlayer);
   if (!checkVictory(table)) {
     if (!tableIsCompleted(table)) {
       nextPlay(lastPlayed, players);
+    } else {
+      document.getElementById('equal').className = "show";
+      removeListeners();
     }
   } else {
+    document.getElementById('win').className = "show";
     removeListeners();
   }
 }
@@ -149,7 +190,7 @@ const nextPlay = (last, char) => {
         if (typeof selectedCase.attributes.handler !== "undefined") {
             selectedCase.removeEventListener('click', selectedCase.attributes.handler);
         }
-        if (typeof table[i][j] === "undefined") {
+        if ((typeof table[i][j] === "undefined") && (you !== last)) {
           var handler = e => {
             clickOnCase.apply(this, [e, nextPlayer]);
           }
@@ -186,4 +227,3 @@ const tableIsCompleted = (table) => {
 
 table = buildTable();
 buildHTMLTable(table);
-nextPlay(lastPlayed, players);
