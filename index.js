@@ -71,7 +71,7 @@ io.on('connection', c => {
     c.broadcast.emit('played', sign, lIndex, cIndex);
   });
   c.on('disconnect', () => {
-    users = [users.find(e => (e === c.id))];
+    users = users.filter(e => (e === c.id));
   });
   /*if (user.find(el => (c.id)))
   c.emit()*/

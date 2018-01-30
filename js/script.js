@@ -25,17 +25,25 @@ s.on('played', (sign, lIndex, cIndex) => {
     if (!tableIsCompleted(table)) {
       nextPlay(lastPlayed, players);
     } else {
+      s.disconnect();
+      setTimeout(function() {
+        window.location.reload(true);
+      }, 5000);
       document.getElementById('equal').className = "show";
       removeListeners();
     }
   } else {
+    s.disconnect();
+    setTimeout(function() {
+      window.location.reload(true);
+    }, 5000);
     document.getElementById('lose').className = "show";
     removeListeners();
   }
 });
 
 window.addEventListener('beforeunload', e => {
-  s.close();
+  s.disconnect();
 });
 
 const buildTable = () => {
@@ -167,10 +175,18 @@ const clickOnCase = (evt, player) => {
     if (!tableIsCompleted(table)) {
       nextPlay(lastPlayed, players);
     } else {
+      s.disconnect();
+      setTimeout(function() {
+        window.location.reload(true);
+      }, 3000);
       document.getElementById('equal').className = "show";
       removeListeners();
     }
   } else {
+    s.disconnect();
+    setTimeout(function() {
+      window.location.reload(true);
+    }, 3000);
     document.getElementById('win').className = "show";
     removeListeners();
   }
