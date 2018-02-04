@@ -1,8 +1,12 @@
+
+var plays = 0;
 var table;
 var players = ["O", "X"];
 var lastPlayed;
 var otherPlayer;
 var you;
+var yourScore = 0;
+var enemyScore = 0;
 const s = io();
 
 s.on('otherPlayerId', (id, y) => {
@@ -25,18 +29,22 @@ s.on('played', (sign, lIndex, cIndex) => {
     if (!tableIsCompleted(table)) {
       nextPlay(lastPlayed, players);
     } else {
-      s.disconnect();
+      //s.disconnect();
       setTimeout(function() {
-        window.location.reload(true);
-      }, 5000);
+        //window.location.reload(true);
+        table = buildTable();
+        buildHTMLTable(table);
+      }, 3000);
       document.getElementById('equal').className = "show";
       removeListeners();
     }
   } else {
-    s.disconnect();
+    //s.disconnect();
+    updateEnemyScore();
     setTimeout(function() {
-      window.location.reload(true);
-    }, 5000);
+      table = buildTable();
+      buildHTMLTable(table);
+    }, 3000);
     document.getElementById('lose').className = "show";
     removeListeners();
   }
@@ -45,6 +53,16 @@ s.on('played', (sign, lIndex, cIndex) => {
 window.addEventListener('beforeunload', e => {
   s.disconnect();
 });
+
+const updateEnemyScore = () => {
+  enemyScore++;
+  document.getElementById('enemyScore').getElementsByClassName('score')[0].innerHTML = enemyScore;
+}
+
+const updatePlayerScore = () => {
+  yourScore++;
+  document.getElementById('yourScore').getElementsByClassName('score')[0].innerHTML = yourScore;
+}
 
 const buildTable = () => {
   var t = new Array([], [], []);
@@ -58,8 +76,20 @@ const buildTable = () => {
 }
 
 const buildHTMLTable = (table) => {
+  var win = document.getElementById('win');
+  var lose = document.getElementById('lose');
+  var equal = document.getElementById('equal');
   var gameArea = document.getElementById('game');
   var i = 0;
+  var lines = gameArea.getElementsByClassName('line');
+  lastPlayed = players[plays % 2]
+  plays++;
+  win.classList.remove('show');
+  lose.classList.remove('show');
+  equal.classList.remove('show');
+  if ((typeof lines !== "undefined") && (lines.length)) {
+    Array.from(lines).map(l => l.remove());
+  }
   if ((typeof table !== "undefined") && (typeof table.map !== "undefined")) {
     table.map(l => {
       var j = 0;
@@ -78,6 +108,9 @@ const buildHTMLTable = (table) => {
       i++;
       return l;
     });
+    if (plays > 1) {
+      nextPlay(lastPlayed, players);
+    }
   }
 }
 
@@ -175,17 +208,20 @@ const clickOnCase = (evt, player) => {
     if (!tableIsCompleted(table)) {
       nextPlay(lastPlayed, players);
     } else {
-      s.disconnect();
+      //s.disconnect();
       setTimeout(function() {
-        window.location.reload(true);
+        table = buildTable();
+        buildHTMLTable(table);
       }, 3000);
       document.getElementById('equal').className = "show";
       removeListeners();
     }
   } else {
-    s.disconnect();
+    //s.disconnect();
+    updatePlayerScore();
     setTimeout(function() {
-      window.location.reload(true);
+      table = buildTable();
+      buildHTMLTable(table);
     }, 3000);
     document.getElementById('win').className = "show";
     removeListeners();

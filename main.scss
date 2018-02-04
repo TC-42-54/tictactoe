@@ -20,6 +20,12 @@ h2 {
   color: $rouge;
 }
 
+.score-container {
+  flex: 0 1 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
 #lose, #win, #equal {
   display: none;
   &.show {
